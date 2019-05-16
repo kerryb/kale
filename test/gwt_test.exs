@@ -2,6 +2,7 @@ defmodule FeatureCase do
   defmacro __using__(options) do
     quote do
       use ExUnit.Case, unquote(options)
+      import FeatureCase
 
       setup_all do
         {:ok, _} = Agent.start(fn -> %{} end, name: __MODULE__)
@@ -15,6 +16,14 @@ defmodule FeatureCase do
       defp get(key), do: Agent.get(__MODULE__, fn state -> state[key] end)
     end
   end
+
+  defmacro defgiven(name, do: block) do
+    quote do
+      def given_(unquote(name)) do
+        unquote(block)
+      end
+    end
+  end
 end
 
 defmodule GWTTest do
@@ -26,7 +35,7 @@ defmodule GWTTest do
     then_("the result is 5")
   end
 
-  defp given_("a calculator") do
+  defgiven("a calculator") do
     # this is a no-op
   end
 
