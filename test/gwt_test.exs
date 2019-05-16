@@ -30,12 +30,12 @@ defmodule GWTTest do
   use FeatureCase
 
   test "Adding" do
-    given_("a calculator")
-    when_("I add 2 and 3")
-    then_("the result is 5")
+    given_ "a calculator"
+    when_ "I add 2 and 3"
+    then_ "the result is 5"
   end
 
-  defgiven("a calculator") do
+  defgiven "a calculator" do
     # this is a no-op
   end
 
