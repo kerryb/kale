@@ -14,13 +14,45 @@ defmodule FeatureCase do
       end
 
       defp get(key), do: Agent.get(__MODULE__, fn state -> state[key] end)
+
+      defp when_(step) do
+        with {vars, label_chunks} <-
+               step
+               |> String.split(~r/\{.*?\}/, include_captures: true)
+               |> Enum.split_with(fn s -> s =~ ~r/\{.*\}/ end),
+             label <- label_chunks |> Enum.join("{}"),
+             args <- vars |> Enum.map(fn a -> String.replace(a, ~r/\{(.*)\}/, "\\1") end) do
+          when_(label, args)
+        end
+      end
     end
   end
 
-  defmacro defgiven(name, do: block) do
+  defmacro defgiven(step, do: block) do
     quote do
-      def given_(unquote(name)) do
+      def given_(unquote(step)) do
         unquote(block)
+      end
+    end
+  end
+
+  defmacro defwhen(step, do: block) do
+    with {vars, label_chunks} <-
+           step
+           |> String.split(~r/\{.*?\}/, include_captures: true)
+           |> Enum.split_with(fn s -> s =~ ~r/\{.*\}/ end),
+         label <- label_chunks |> Enum.join("{}"),
+         var_names <- vars |> Enum.map(fn a -> String.replace(a, ~r/\{(.*)\}/, "\\1") end) do
+      quote do
+        def when_(unquote(label), values) do
+          var!(args) =
+            unquote(var_names)
+            |> Enum.map(&String.to_atom/1)
+            |> Enum.zip(values)
+            |> Enum.into(%{})
+
+          unquote(block)
+        end
       end
     end
   end
@@ -31,19 +63,19 @@ defmodule GWTTest do
 
   test "Adding" do
     given_ "a calculator"
-    when_ "I add 2 and 3"
-    then_ "the result is 5"
+    when_ "I add {2} and {3}"
+    then_ "the result is {5}"
   end
 
   defgiven "a calculator" do
     # this is a no-op
   end
 
-  defp when_("I add " <> <<a::bytes-size(1)>> <> " and " <> <<b::bytes-size(1)>>) do
-    save(:result, String.to_integer(a) + String.to_integer(b))
+  defwhen "I add {a} and {b}" do
+    save(:result, String.to_integer(args.a) + String.to_integer(args.b))
   end
 
   defp then_("the result is " <> result) do
-    assert get(:result) == String.to_integer(result)
+    assert get(:result) == result |> String.replace(~r/\{(.*)\}/, "\\1") |> String.to_integer()
   end
 end
