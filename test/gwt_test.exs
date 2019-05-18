@@ -15,36 +15,36 @@ defmodule FeatureCase do
 
       defp get(key), do: Agent.get(__MODULE__, fn state -> state[key] end)
 
-      defp when_(step) do
+      def step(step) do
         with {vars, label_chunks} <-
                step
-               |> String.split(~r/\{.*?\}/, include_captures: true)
+               |> String.split(~r/\{.*?\}/, include_captures: true, trim: true)
                |> Enum.split_with(fn s -> s =~ ~r/\{.*\}/ end),
              label <- label_chunks |> Enum.join("{}"),
              args <- vars |> Enum.map(fn a -> String.replace(a, ~r/\{(.*)\}/, "\\1") end) do
-          when_(label, args)
+          step(label, args)
         end
       end
+
+      defdelegate given_(step), to: __MODULE__, as: :step
+      defdelegate when_(step), to: __MODULE__, as: :step
+      defdelegate then_(step), to: __MODULE__, as: :step
     end
   end
 
-  defmacro defgiven(step, do: block) do
-    quote do
-      def given_(unquote(step)) do
-        unquote(block)
-      end
-    end
-  end
+  defmacro defgiven(step, do: block), do: define_step(step, block)
+  defmacro defwhen(step, do: block), do: define_step(step, block)
+  defmacro defthen(step, do: block), do: define_step(step, block)
 
-  defmacro defwhen(step, do: block) do
+  defp define_step(step, block) do
     with {vars, label_chunks} <-
            step
-           |> String.split(~r/\{.*?\}/, include_captures: true)
+           |> String.split(~r/\{.*?\}/, include_captures: true, trim: true)
            |> Enum.split_with(fn s -> s =~ ~r/\{.*\}/ end),
          label <- label_chunks |> Enum.join("{}"),
          var_names <- vars |> Enum.map(fn a -> String.replace(a, ~r/\{(.*)\}/, "\\1") end) do
       quote do
-        def when_(unquote(label), values) do
+        def step(unquote(label), values) do
           var!(args) =
             unquote(var_names)
             |> Enum.map(&String.to_atom/1)
@@ -75,7 +75,7 @@ defmodule GWTTest do
     save(:result, String.to_integer(args.a) + String.to_integer(args.b))
   end
 
-  defp then_("the result is " <> result) do
-    assert get(:result) == result |> String.replace(~r/\{(.*)\}/, "\\1") |> String.to_integer()
+  defthen "the result is {c}" do
+    assert get(:result) == String.to_integer(args.c)
   end
 end
