@@ -7,18 +7,18 @@ defmodule FeatureCase do
       import FeatureCase
 
       setup do
-        {:ok, _} = Agent.start(fn -> %{} end, name: {:global, FeatureCase.agent_name()})
+        {:ok, _} = Agent.start(fn -> %{} end, name: FeatureCase.agent_name())
         :ok
       end
 
       defp save(key, value) do
-        Agent.update({:global, FeatureCase.agent_name()}, fn state ->
+        Agent.update(FeatureCase.agent_name(), fn state ->
           Map.put(state, key, value)
         end)
       end
 
       defp get(key) do
-        Agent.get({:global, FeatureCase.agent_name()}, fn state -> state[key] end)
+        Agent.get(FeatureCase.agent_name(), fn state -> state[key] end)
       end
 
       def step(step) do
@@ -32,7 +32,7 @@ defmodule FeatureCase do
     end
   end
 
-  def agent_name, do: "state-for-#{inspect(self())}"
+  def agent_name, do: {:global, {__MODULE__, :state, self()}}
 
   defmacro defgiven(step, do: block), do: define_step(step, block)
   defmacro defwhen(step, do: block), do: define_step(step, block)
