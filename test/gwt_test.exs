@@ -36,18 +36,24 @@ defmodule FeatureCase do
   defmacro defthen(step, do: block), do: define_step(step, block)
 
   defp define_step(step, block) do
-    {label, var_names} = FeatureCase.parse_step(step)
+    case FeatureCase.parse_step(step) do
+      {label, []} ->
+        quote do
+          def step(unquote(label), _values), do: unquote(block)
+        end
 
-    quote do
-      def step(unquote(label), values) do
-        var!(args) =
-          unquote(var_names)
-          |> Enum.map(&String.to_atom/1)
-          |> Enum.zip(values)
-          |> Enum.into(%{})
+      {label, var_names} ->
+        quote do
+          def step(unquote(label), values) do
+            var!(args) =
+              unquote(var_names)
+              |> Enum.map(&String.to_atom/1)
+              |> Enum.zip(values)
+              |> Enum.into(%{})
 
-        unquote(block)
-      end
+            unquote(block)
+          end
+        end
     end
   end
 
