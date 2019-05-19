@@ -16,14 +16,8 @@ defmodule FeatureCase do
       defp get(key), do: Agent.get(__MODULE__, fn state -> state[key] end)
 
       def step(step) do
-        with {vars, label_chunks} <-
-               step
-               |> String.split(~r/\{.*?\}/, include_captures: true, trim: true)
-               |> Enum.split_with(fn s -> s =~ ~r/\{.*\}/ end),
-             label <- label_chunks |> Enum.join("{}"),
-             args <- vars |> Enum.map(fn a -> String.replace(a, ~r/\{(.*)\}/, "\\1") end) do
-          step(label, args)
-        end
+        {label, args} = parse_step(step)
+        step(label, args)
       end
 
       defdelegate given_(step), to: __MODULE__, as: :step
@@ -37,23 +31,29 @@ defmodule FeatureCase do
   defmacro defthen(step, do: block), do: define_step(step, block)
 
   defp define_step(step, block) do
+    {label, var_names} = FeatureCase.parse_step(step)
+
+    quote do
+      def step(unquote(label), values) do
+        var!(args) =
+          unquote(var_names)
+          |> Enum.map(&String.to_atom/1)
+          |> Enum.zip(values)
+          |> Enum.into(%{})
+
+        unquote(block)
+      end
+    end
+  end
+
+  def parse_step(step) do
     with {vars, label_chunks} <-
            step
            |> String.split(~r/\{.*?\}/, include_captures: true, trim: true)
            |> Enum.split_with(fn s -> s =~ ~r/\{.*\}/ end),
          label <- label_chunks |> Enum.join("{}"),
-         var_names <- vars |> Enum.map(fn a -> String.replace(a, ~r/\{(.*)\}/, "\\1") end) do
-      quote do
-        def step(unquote(label), values) do
-          var!(args) =
-            unquote(var_names)
-            |> Enum.map(&String.to_atom/1)
-            |> Enum.zip(values)
-            |> Enum.into(%{})
-
-          unquote(block)
-        end
-      end
+         args <- vars |> Enum.map(fn a -> String.replace(a, ~r/\{(.*)\}/, "\\1") end) do
+      {label, args}
     end
   end
 end
