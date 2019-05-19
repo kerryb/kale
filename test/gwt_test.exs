@@ -15,8 +15,9 @@ defmodule FeatureCase do
         end)
       end
 
-      defp get(key),
-        do: Agent.get({:global, FeatureCase.agent_name()}, fn state -> state[key] end)
+      defp get(key) do
+        Agent.get({:global, FeatureCase.agent_name()}, fn state -> state[key] end)
+      end
 
       def step(step) do
         {label, args} = parse_step(step)
