@@ -1,21 +1,12 @@
 # GWT
 
-**TODO: Add description**
+A spike looking at adding basic given-when-then steps to ExUnit tests.
 
-## Installation
+## Features
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `gwt` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:gwt, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/gwt](https://hexdocs.pm/gwt).
-
+* define tests as sequences of calls to `given_`, `when_` and `then_` (unfortunately `when` is a reserved word)
+* match steps by calling `defwhen` etc with a string matching the one used in the step
+* interpolate values into step descriptions using {braces}
+  * placeholder variable names are available as methods on the magic `args` variable
+* pass data between steps by calling `save` and `get` with a key
+  * data is stored in a per-test Agent, allowing tests to run in parallel
