@@ -4,16 +4,19 @@ defmodule FeatureCase do
       use ExUnit.Case, unquote(options)
       import FeatureCase
 
-      setup_all do
-        {:ok, _} = Agent.start(fn -> %{} end, name: __MODULE__)
+      setup do
+        {:ok, _} = Agent.start(fn -> %{} end, name: {:global, FeatureCase.agent_name()})
         :ok
       end
 
       defp save(key, value) do
-        Agent.update(__MODULE__, fn state -> Map.put(state, key, value) end)
+        Agent.update({:global, FeatureCase.agent_name()}, fn state ->
+          Map.put(state, key, value)
+        end)
       end
 
-      defp get(key), do: Agent.get(__MODULE__, fn state -> state[key] end)
+      defp get(key),
+        do: Agent.get({:global, FeatureCase.agent_name()}, fn state -> state[key] end)
 
       def step(step) do
         {label, args} = parse_step(step)
@@ -25,6 +28,8 @@ defmodule FeatureCase do
       defdelegate then_(step), to: __MODULE__, as: :step
     end
   end
+
+  def agent_name, do: "state-for-#{inspect(self())}"
 
   defmacro defgiven(step, do: block), do: define_step(step, block)
   defmacro defwhen(step, do: block), do: define_step(step, block)
@@ -59,12 +64,18 @@ defmodule FeatureCase do
 end
 
 defmodule GWTTest do
-  use FeatureCase
+  use FeatureCase, async: true
 
   test "Adding" do
     given_ "a calculator"
     when_ "I add {2} and {3}"
     then_ "the result is {5}"
+  end
+
+  test "Adding again" do
+    given_ "a calculator"
+    when_ "I add {2} and {40}"
+    then_ "the result is {42}"
   end
 
   defgiven "a calculator" do
