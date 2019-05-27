@@ -9,7 +9,8 @@ defmodule Kale.MixProject do
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      package: package()
+      package: package(),
+      docs: docs()
     ]
   end
 
@@ -36,6 +37,13 @@ defmodule Kale.MixProject do
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/kerryb/kale"},
       source_url: "https://github.com/kerryb/kale"
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      extras: ["README.md"]
     ]
   end
 end
