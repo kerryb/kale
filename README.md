@@ -1,6 +1,8 @@
 # Kale
 
-A spike looking at adding basic given-when-then steps to ExUnit tests.
+Basic given-when-then steps for ExUnit tests. This is currently little more
+than a spike: it's probably not ready to use, and the API is certainly not
+stable.
 
 ## Features
 
@@ -10,3 +12,11 @@ A spike looking at adding basic given-when-then steps to ExUnit tests.
   * placeholder variable names are available as methods on the magic `args` variable
 * pass data between steps by calling `save` and `get` with a key
   * data is stored in a per-test Agent, allowing tests to run in parallel
+
+## Usage
+
+See the tests for examples.
+
+## Why Kale?
+
+As a nod to [Spinach](https://github.com/codegram/spinach).
