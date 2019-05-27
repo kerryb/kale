@@ -1,27 +1,27 @@
 defmodule KaleTest do
   use FeatureCase, async: true
 
-  test "Adding" do
-    given_ "a calculator"
-    when_ "I add {2} and {3}"
-    then_ "the result is {5}"
-  end
-
-  test "Adding again" do
-    given_ "a calculator"
-    when_ "I add {2} and {40}"
+  test "Parameterised steps and persistent context" do
+    given_ "I start with {18}"
+    when_ "I add {3} then multiply by {2}"
     then_ "the result is {42}"
   end
 
-  defgiven "a calculator" do
-    # this is a no-op
+  test "Contexts are isolated between async tests" do
+    given_ "I start with {16}"
+    when_ "I add {7} then multiply by {3}"
+    then_ "the result is {69}"
   end
 
-  defwhen "I add {a} and {b}" do
-    save(:result, String.to_integer(args.a) + String.to_integer(args.b))
+  defgiven "I start with {a}" do
+    save(:result, String.to_integer(args.a))
   end
 
-  defthen "the result is {c}" do
-    assert get(:result) == String.to_integer(args.c)
+  defwhen "I add {a} then multiply by {b}" do
+    save(:result, (get(:result) + String.to_integer(args.a)) * String.to_integer(args.b))
+  end
+
+  defthen "the result is {result}" do
+    assert get(:result) == String.to_integer(args.result)
   end
 end
