@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure your application as:
 #
-#     config :gwt, key: :value
+#     config :kale, key: :value
 #
 # and access this configuration in your application as:
 #
-#     Application.get_env(:gwt, :key)
+#     Application.get_env(:kale, :key)
 #
 # You can also configure a third-party app:
 #

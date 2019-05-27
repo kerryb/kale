@@ -1,4 +1,4 @@
-defmodule GWTTest do
+defmodule KaleTest do
   use FeatureCase, async: true
 
   test "Adding" do

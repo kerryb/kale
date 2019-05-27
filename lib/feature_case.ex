@@ -1,5 +1,3 @@
-# This shouldn't really be in lib
-#
 defmodule FeatureCase do
   defmacro __using__(options) do
     quote do

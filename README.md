@@ -1,4 +1,4 @@
-# GWT
+# Kale
 
 A spike looking at adding basic given-when-then steps to ExUnit tests.
 
