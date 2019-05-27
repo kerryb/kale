@@ -1,5 +1,5 @@
 defmodule KaleTest do
-  use FeatureCase, async: true
+  use Kale.FeatureCase, async: true
 
   test "Parameterised steps and persistent context" do
     given_ "I start with {18}"

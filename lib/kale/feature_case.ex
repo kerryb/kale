@@ -1,22 +1,22 @@
-defmodule FeatureCase do
+defmodule Kale.FeatureCase do
   defmacro __using__(options) do
     quote do
       use ExUnit.Case, unquote(options)
-      import FeatureCase
+      import Kale.FeatureCase
 
       setup do
-        {:ok, _} = Agent.start(fn -> %{} end, name: FeatureCase.agent_name())
+        {:ok, _} = Agent.start(fn -> %{} end, name: Kale.FeatureCase.agent_name())
         :ok
       end
 
       defp save(key, value) do
-        Agent.update(FeatureCase.agent_name(), fn state ->
+        Agent.update(Kale.FeatureCase.agent_name(), fn state ->
           Map.put(state, key, value)
         end)
       end
 
       defp get(key) do
-        Agent.get(FeatureCase.agent_name(), fn state -> state[key] end)
+        Agent.get(Kale.FeatureCase.agent_name(), fn state -> state[key] end)
       end
 
       def step(step) do
@@ -37,7 +37,7 @@ defmodule FeatureCase do
   defmacro defthen(step, do: block), do: define_step(step, block)
 
   defp define_step(step, block) do
-    case FeatureCase.parse_step(step) do
+    case Kale.FeatureCase.parse_step(step) do
       {label, []} ->
         quote do
           def step(unquote(label), _values), do: unquote(block)
