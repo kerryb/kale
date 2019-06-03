@@ -59,12 +59,8 @@ defmodule Kale.FeatureCase do
   end
 
   def parse_step(step) do
-    with {vars, label_chunks} <-
-           step
-           |> String.split(~r/\{.*?\}/, include_captures: true, trim: true)
-           |> Enum.split_with(fn s -> s =~ ~r/\{.*\}/ end),
-         label <- label_chunks |> Enum.join("{}"),
-         args <- vars |> Enum.map(fn a -> String.replace(a, ~r/\{(.*)\}/, "\\1") end) do
+    with args <- ~r/\{(.*?)\}/ |> Regex.scan(step, capture: :all_but_first) |> List.flatten(),
+         label <- step |> String.replace(~r/\{.*?\}/, "{}") do
       {label, args}
     end
   end
