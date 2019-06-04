@@ -15,14 +15,9 @@ defmodule Kale.FeatureCase do
         end)
       end
 
-      defp get(key) do
-        Agent.get(Kale.FeatureCase.agent_name(), fn state -> state[key] end)
-      end
+      defp get(key), do: Agent.get(Kale.FeatureCase.agent_name(), fn state -> state[key] end)
 
-      def step(step) do
-        {label, args} = parse_step(step)
-        step(label, args)
-      end
+      def step(step), do: step(normalise_name(step), extract_args(step))
 
       defdelegate given_(step), to: __MODULE__, as: :step
       defdelegate when_(step), to: __MODULE__, as: :step
@@ -32,36 +27,21 @@ defmodule Kale.FeatureCase do
 
   def agent_name, do: {:global, {__MODULE__, :state, self()}}
 
-  defmacro defgiven(step, do: block), do: define_step(step, block)
-  defmacro defwhen(step, do: block), do: define_step(step, block)
-  defmacro defthen(step, do: block), do: define_step(step, block)
+  defmacro defgiven(step, args, do: block), do: define_step(step, args, block)
+  defmacro defwhen(step, args, do: block), do: define_step(step, args, block)
+  defmacro defthen(step, args, do: block), do: define_step(step, args, block)
 
-  defp define_step(step, block) do
-    case Kale.FeatureCase.parse_step(step) do
-      {label, []} ->
-        quote do
-          def step(unquote(label), _values), do: unquote(block)
-        end
-
-      {label, var_names} ->
-        quote do
-          def step(unquote(label), values) do
-            var!(args) =
-              unquote(var_names)
-              |> Enum.map(&String.to_atom/1)
-              |> Enum.zip(values)
-              |> Enum.into(%{})
-
-            unquote(block)
-          end
-        end
+  defp define_step(step, args, block) do
+    quote do
+      def unquote({:step, [], [normalise_name(step) | [args]]}) do
+        unquote(block)
+      end
     end
   end
 
-  def parse_step(step) do
-    with args <- ~r/\{(.*?)\}/ |> Regex.scan(step, capture: :all_but_first) |> List.flatten(),
-         label <- step |> String.replace(~r/\{.*?\}/, "{}") do
-      {label, args}
-    end
+  def normalise_name(step), do: step |> String.replace(~r/\{.*?\}/, "{}")
+
+  def extract_args(step) do
+    Regex.scan(~r/\{(.*?)\}/, step, capture: :all_but_first) |> List.flatten()
   end
 end

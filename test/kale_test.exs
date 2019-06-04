@@ -13,15 +13,15 @@ defmodule KaleTest do
     then_ "the result is {69}"
   end
 
-  defgiven "I start with {a}" do
-    save(:result, String.to_integer(args.a))
+  defgiven "I start with {a}", [a] do
+    save(:result, String.to_integer(a))
   end
 
-  defwhen "I add {a} then multiply by {b}" do
-    save(:result, (get(:result) + String.to_integer(args.a)) * String.to_integer(args.b))
+  defwhen "I add {a} then multiply by {b}", [a, b] do
+    save(:result, (get(:result) + String.to_integer(a)) * String.to_integer(b))
   end
 
-  defthen "the result is {result}" do
-    assert get(:result) == String.to_integer(args.result)
+  defthen "the result is {result}", [result] do
+    assert get(:result) == String.to_integer(result)
   end
 end
