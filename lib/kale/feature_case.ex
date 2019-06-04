@@ -47,10 +47,5 @@ defmodule Kale.FeatureCase do
   end
 
   def context, do: Agent.get(agent_name(), & &1)
-
-  def update_context(results) do
-    Agent.update(agent_name(), fn state ->
-      state |> Map.merge(results)
-    end)
-  end
+  def update_context(results), do: Agent.update(agent_name(), &Map.merge(&1, results))
 end
