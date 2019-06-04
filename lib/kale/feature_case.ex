@@ -9,17 +9,9 @@ defmodule Kale.FeatureCase do
         :ok
       end
 
-      defp save(results) do
-        Agent.update(Kale.FeatureCase.agent_name(), fn state ->
-          state |> Map.merge(results)
-        end)
-      end
-
-      defp context, do: Agent.get(Kale.FeatureCase.agent_name(), & &1)
-
       def step(step) do
-        case step(normalise_name(step), extract_args(step), context()) do
-          %{} = results -> save(results)
+        case step(normalise_name(step), extract_args(step), Kale.FeatureCase.context()) do
+          %{} = results -> Kale.FeatureCase.update_context(results)
           _ -> :ok
         end
       end
@@ -48,5 +40,13 @@ defmodule Kale.FeatureCase do
 
   def extract_args(step) do
     Regex.scan(~r/\{(.*?)\}/, step, capture: :all_but_first) |> List.flatten()
+  end
+
+  def context, do: Agent.get(Kale.FeatureCase.agent_name(), & &1)
+
+  def update_context(results) do
+    Agent.update(Kale.FeatureCase.agent_name(), fn state ->
+      state |> Map.merge(results)
+    end)
   end
 end
