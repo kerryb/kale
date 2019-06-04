@@ -2,7 +2,7 @@ defmodule Kale.FeatureCase do
   defmacro __using__(options) do
     quote do
       use ExUnit.Case, unquote(options)
-      import Kale.FeatureCase
+      import Kale.FeatureCase, only: :macros
 
       setup do
         {:ok, _} = Agent.start(fn -> %{} end, name: Kale.FeatureCase.agent_name())
@@ -10,7 +10,11 @@ defmodule Kale.FeatureCase do
       end
 
       def step(step) do
-        case step(normalise_name(step), extract_args(step), Kale.FeatureCase.context()) do
+        case step(
+               Kale.FeatureCase.normalise_name(step),
+               Kale.FeatureCase.extract_args(step),
+               Kale.FeatureCase.context()
+             ) do
           %{} = results -> Kale.FeatureCase.update_context(results)
           _ -> :ok
         end
