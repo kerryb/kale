@@ -19,10 +19,6 @@ defmodule Kale.FeatureCase do
           _ -> :ok
         end
       end
-
-      defdelegate given_(step), to: __MODULE__, as: :step
-      defdelegate when_(step), to: __MODULE__, as: :step
-      defdelegate then_(step), to: __MODULE__, as: :step
     end
   end
 
@@ -43,6 +39,12 @@ defmodule Kale.FeatureCase do
       end
     end
   end
+
+  defmacro given_(step), do: quote(do: step(unquote(step)))
+  defmacro when_(step), do: quote(do: step(unquote(step)))
+  defmacro then_(step), do: quote(do: step(unquote(step)))
+  defmacro and_(step), do: quote(do: step(unquote(step)))
+  defmacro but_(step), do: quote(do: step(unquote(step)))
 
   defmacro defgiven(step, args, context, do: block), do: define_step(step, args, context, block)
   defmacro defwhen(step, args, context, do: block), do: define_step(step, args, context, block)
