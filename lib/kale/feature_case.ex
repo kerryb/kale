@@ -5,17 +5,17 @@ defmodule Kale.FeatureCase do
       import Kale.FeatureCase, only: :macros
 
       setup do
-        {:ok, _} = Agent.start(fn -> %{} end, name: Kale.FeatureCase.agent_name())
+        {:ok, _} = Agent.start(fn -> %{} end, name: unquote(__MODULE__).agent_name())
         :ok
       end
 
       def step(step) do
         case step(
-               Kale.FeatureCase.normalise_name(step),
-               Kale.FeatureCase.extract_args(step),
-               Kale.FeatureCase.context()
+               unquote(__MODULE__).normalise_name(step),
+               unquote(__MODULE__).extract_args(step),
+               unquote(__MODULE__).context()
              ) do
-          %{} = results -> Kale.FeatureCase.update_context(results)
+          %{} = results -> unquote(__MODULE__).update_context(results)
           _ -> :ok
         end
       end
@@ -46,10 +46,10 @@ defmodule Kale.FeatureCase do
     Regex.scan(~r/\{(.*?)\}/, step, capture: :all_but_first) |> List.flatten()
   end
 
-  def context, do: Agent.get(Kale.FeatureCase.agent_name(), & &1)
+  def context, do: Agent.get(agent_name(), & &1)
 
   def update_context(results) do
-    Agent.update(Kale.FeatureCase.agent_name(), fn state ->
+    Agent.update(agent_name(), fn state ->
       state |> Map.merge(results)
     end)
   end
