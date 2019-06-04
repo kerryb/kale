@@ -28,6 +28,22 @@ defmodule Kale.FeatureCase do
 
   def agent_name, do: {:global, {__MODULE__, :state, self()}}
 
+  defmacro feature(name, do: block) do
+    quote do
+      describe unquote(name) do
+        unquote(block)
+      end
+    end
+  end
+
+  defmacro scenario(name, do: block) do
+    quote do
+      test unquote(name), context do
+        unquote(block)
+      end
+    end
+  end
+
   defmacro defgiven(step, args, context, do: block), do: define_step(step, args, context, block)
   defmacro defwhen(step, args, context, do: block), do: define_step(step, args, context, block)
   defmacro defthen(step, args, context, do: block), do: define_step(step, args, context, block)
