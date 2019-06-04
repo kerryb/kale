@@ -9,15 +9,20 @@ defmodule Kale.FeatureCase do
         :ok
       end
 
-      defp save(key, value) do
+      defp save(results) do
         Agent.update(Kale.FeatureCase.agent_name(), fn state ->
-          Map.put(state, key, value)
+          state |> Map.merge(results)
         end)
       end
 
-      defp get(key), do: Agent.get(Kale.FeatureCase.agent_name(), fn state -> state[key] end)
+      defp context, do: Agent.get(Kale.FeatureCase.agent_name(), & &1)
 
-      def step(step), do: step(normalise_name(step), extract_args(step))
+      def step(step) do
+        case step(normalise_name(step), extract_args(step), context()) do
+          %{} = results -> save(results)
+          _ -> :ok
+        end
+      end
 
       defdelegate given_(step), to: __MODULE__, as: :step
       defdelegate when_(step), to: __MODULE__, as: :step
@@ -27,13 +32,13 @@ defmodule Kale.FeatureCase do
 
   def agent_name, do: {:global, {__MODULE__, :state, self()}}
 
-  defmacro defgiven(step, args, do: block), do: define_step(step, args, block)
-  defmacro defwhen(step, args, do: block), do: define_step(step, args, block)
-  defmacro defthen(step, args, do: block), do: define_step(step, args, block)
+  defmacro defgiven(step, args, context, do: block), do: define_step(step, args, context, block)
+  defmacro defwhen(step, args, context, do: block), do: define_step(step, args, context, block)
+  defmacro defthen(step, args, context, do: block), do: define_step(step, args, context, block)
 
-  defp define_step(step, args, block) do
+  defp define_step(step, args, context, block) do
     quote do
-      def unquote({:step, [], [normalise_name(step) | [args]]}) do
+      def unquote({:step, [], [normalise_name(step), args, context]}) do
         unquote(block)
       end
     end
