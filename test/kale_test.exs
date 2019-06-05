@@ -22,6 +22,17 @@ defmodule KaleTest do
     Then the result is {69}
     """
 
+    scenario "Lines not beginning with Given, When, Then, And, But or * are ignored", """
+    Given I start with {16}
+    This is just a note
+    When I add {7} then multiply by {3}
+    And I add {1} then multiply by {2}
+    Anders could have written this line, but it's not an And
+    But I add {2} then multiply by {4}
+    * I add {5} then multiply by {5}
+    Then the result is {568}
+    """
+
     scenario "data returned by setup callbacks is merged into the context", """
     Then foo is {a} and bar is {b}
     """

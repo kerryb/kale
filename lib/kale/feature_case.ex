@@ -31,6 +31,7 @@ defmodule Kale.FeatureCase do
     steps =
       body
       |> String.split(~r/\R/, trim: true)
+      |> Enum.filter(&(&1 =~ ~r/^(Given|When|Then|And|But|\*)\b/))
       |> Enum.map(&String.replace(&1, ~r/^\s*\S+\s+/, ""))
 
     quote do
