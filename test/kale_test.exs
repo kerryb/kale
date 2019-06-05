@@ -11,19 +11,19 @@ defmodule KaleTest do
     end
 
     scenario "Parameterised steps and persistent context", """
-      Given I start with {18}
-      When I add {3} then multiply by {2}
-      Then the result is {42}
+    Given I start with {18}
+    When I add {3} then multiply by {2}
+    Then the result is {42}
     """
 
     scenario "Contexts are isolated between async tests", """
-      Given I start with {16}
-      When I add {7} then multiply by {3}
-      Then the result is {69}
+    Given I start with {16}
+    When I add {7} then multiply by {3}
+    Then the result is {69}
     """
 
     scenario "data returned by setup callbacks is merged into the context", """
-      Then foo is {a} and bar is {b}
+    Then foo is {a} and bar is {b}
     """
   end
 
