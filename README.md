@@ -9,6 +9,7 @@ stable.
   * define tests with multline strings using Given, When, Then, And, But and *
     * other lines are ignored
   * match steps by calling `defwhen` etc with a string matching the one used in the step
+    * note that it doesn't actually matter whether you use `defwhen`, `defthen` etc
   * interpolate values into step descriptions using {braces}
   * step definitions take a list of placeholder variables, and the `ExUnit` context
 
