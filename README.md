@@ -6,16 +6,15 @@ stable.
 
 ## Features
 
-  * define tests as sequences of calls to `given_`, `when_` and `then_` (unfortunately `when` is a reserved word)
+  * define tests with multline strings using Given, When, Then, And, But and *
+    * other lines are ignored
   * match steps by calling `defwhen` etc with a string matching the one used in the step
   * interpolate values into step descriptions using {braces}
-    * placeholder variable names are available as methods on the magic `args` variable
-  * pass data between steps as a context map
-    * data is stored in a per-test Agent, allowing tests to run in parallel
+  * step definitions take a list of placeholder variables, and the `ExUnit` context
 
 ## Usage
 
-See the tests for examples.
+See the tests for examples for now.
 
 ## Why Kale?
 
