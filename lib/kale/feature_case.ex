@@ -4,19 +4,14 @@ defmodule Kale.FeatureCase do
       use ExUnit.Case, unquote(options)
       import Kale.FeatureCase, only: :macros
 
-      setup do
-        {:ok, _} = Agent.start(fn -> %{} end, name: unquote(__MODULE__).agent_name())
-        :ok
-      end
-
-      def step(step) do
+      def step(step, context) do
         case step(
                unquote(__MODULE__).normalise_name(step),
                unquote(__MODULE__).extract_args(step),
-               unquote(__MODULE__).context()
+               context
              ) do
-          %{} = results -> unquote(__MODULE__).update_context(results)
-          _ -> :ok
+          %{} = results -> context = context |> Map.merge(results)
+          _ -> context
         end
       end
     end
@@ -32,19 +27,18 @@ defmodule Kale.FeatureCase do
     end
   end
 
-  defmacro scenario(name, do: block) do
+  defmacro scenario(name, body) do
+    steps =
+      body
+      |> String.split(~r/\R/, trim: true)
+      |> Enum.map(&String.replace(&1, ~r/^\s*\S+\s+/, ""))
+
     quote do
       test unquote(name), context do
-        unquote(block)
+        unquote(steps) |> Enum.reduce(context, fn s, c -> step(s, c) end)
       end
     end
   end
-
-  defmacro given_(step), do: quote(do: step(unquote(step)))
-  defmacro when_(step), do: quote(do: step(unquote(step)))
-  defmacro then_(step), do: quote(do: step(unquote(step)))
-  defmacro and_(step), do: quote(do: step(unquote(step)))
-  defmacro but_(step), do: quote(do: step(unquote(step)))
 
   defmacro defgiven(step, args, context, do: block), do: define_step(step, args, context, block)
   defmacro defwhen(step, args, context, do: block), do: define_step(step, args, context, block)
@@ -63,7 +57,4 @@ defmodule Kale.FeatureCase do
   def extract_args(step) do
     Regex.scan(~r/\{(.*?)\}/, step, capture: :all_but_first) |> List.flatten()
   end
-
-  def context, do: Agent.get(agent_name(), & &1)
-  def update_context(results), do: Agent.update(agent_name(), &Map.merge(&1, results))
 end

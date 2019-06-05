@@ -1,18 +1,30 @@
 defmodule KaleTest do
   use Kale.FeatureCase, async: true
 
+  setup_all do
+    {:ok, foo: "a"}
+  end
+
   feature "Using Kale" do
-    scenario "Parameterised steps and persistent context" do
-      given_ "I start with {18}"
-      when_ "I add {3} then multiply by {2}"
-      then_ "the result is {42}"
+    setup do
+      {:ok, bar: "b"}
     end
 
-    scenario "Contexts are isolated between async tests" do
-      given_ "I start with {16}"
-      when_ "I add {7} then multiply by {3}"
-      then_ "the result is {69}"
-    end
+    scenario "Parameterised steps and persistent context", """
+      Given I start with {18}
+      When I add {3} then multiply by {2}
+      Then the result is {42}
+    """
+
+    scenario "Contexts are isolated between async tests", """
+      Given I start with {16}
+      When I add {7} then multiply by {3}
+      Then the result is {69}
+    """
+
+    scenario "data returned by setup callbacks is merged into the context", """
+      Then foo is {a} and bar is {b}
+    """
   end
 
   defgiven "I start with {a}", [a], _ do
@@ -25,5 +37,10 @@ defmodule KaleTest do
 
   defthen "the result is {result}", [result], context do
     assert context.result == String.to_integer(result)
+  end
+
+  defthen "foo is {foo} and bar is {bar}", [foo, bar], context do
+    assert context.foo == foo
+    assert context.bar == bar
   end
 end
