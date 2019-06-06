@@ -118,7 +118,7 @@ defmodule Kale.FeatureCase do
 
   @doc false
   def extract_args(step) do
-    Regex.scan(~r/\{(.*?)\}/, step, capture: :all_but_first) |> List.flatten()
+    ~r/\{(.*?)\}/ |> Regex.scan(step, capture: :all_but_first) |> List.flatten()
   end
 
   defp define_step(step, context, block) do

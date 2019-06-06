@@ -27,6 +27,7 @@ defmodule Kale.MixProject do
 
   defp deps do
     [
+      {:credo, "~> 1.0", only: :dev},
       {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
