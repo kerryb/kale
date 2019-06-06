@@ -4,7 +4,7 @@ defmodule Kale.FeatureCase do
       use ExUnit.Case, options
       import Kale.FeatureCase, only: :macros
 
-      def step(step, context) do
+      defp step(step, context) do
         case step(
                Kale.FeatureCase.normalise_name(step),
                Kale.FeatureCase.extract_args(step),
@@ -62,7 +62,7 @@ defmodule Kale.FeatureCase do
       |> Enum.map(&quote do: var!(unquote(&1)))
 
     quote do
-      def unquote({:step, [], [normalise_name(step), quoted_args, context]}) do
+      defp unquote({:step, [], [normalise_name(step), quoted_args, context]}) do
         unquote(block)
       end
     end
