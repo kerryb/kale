@@ -10,7 +10,8 @@ defmodule Kale.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
-      docs: docs()
+      docs: docs(),
+      dialyzer: dialyzer()
     ]
   end
 
@@ -28,6 +29,7 @@ defmodule Kale.MixProject do
   defp deps do
     [
       {:credo, "~> 1.0", only: :dev},
+      {:dialyxir, "~> 1.0.0-rc.6", only: :dev, runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
@@ -38,6 +40,12 @@ defmodule Kale.MixProject do
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/kerryb/kale"},
       source_url: "https://github.com/kerryb/kale"
+    ]
+  end
+
+  defp dialyzer do
+    [
+      plt_add_deps: :transitive
     ]
   end
 
