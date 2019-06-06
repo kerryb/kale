@@ -1,4 +1,45 @@
 defmodule Kale.FeatureCase do
+  @moduledoc ~s'''
+  An `ExUnit` test case for writing features using Kale.
+
+  # Usage
+
+  ```
+  defmodule MyTest do
+    use Kale.FeatureCase, async: true
+
+    feature "Feature description here" do
+      scenario "Scenario description here", """
+      Given some precondition
+      When action {foo} happens
+      Then the result is {bar}
+      """
+
+    defgiven "some precondition" do
+      # ...
+    end
+
+    defwhen "action {action} happens" do
+      # interpolated variables are magically available
+      result = do_something(action)
+      # if the step returns a map, it will be merged with the test context
+      %{result: result}
+    end
+
+    defthen "the result is {expected}", %{result: result} do
+      # Optional second argument for context, as per standard ExUnit
+      assert result == expected
+    end
+  end
+  ```
+
+  Each `feature` generates a `describe`, and each `scenario` a `test`. Standard
+  ExUnit features such as `setup` can be used as normal.
+
+  To avoid the formatter inserting extra parens, you can specify `import_deps:
+  [:kale]` in your `.formatter.exs`.
+  '''
+
   defmacro __using__(options) do
     quote bind_quoted: [options: options] do
       use ExUnit.Case, options
@@ -17,6 +58,9 @@ defmodule Kale.FeatureCase do
     end
   end
 
+  @doc """
+  Generate a feature block, which corresponds to an ExUnit `describe`.
+  """
   defmacro feature(name, do: block) do
     quote do
       describe unquote(name) do
@@ -25,6 +69,9 @@ defmodule Kale.FeatureCase do
     end
   end
 
+  @doc """
+  Generate a scenario block, which corresponds to an ExUnit `test`.
+  """
   defmacro scenario(name, body) do
     steps =
       body
@@ -41,20 +88,35 @@ defmodule Kale.FeatureCase do
 
   @empty_context quote do: %{}
 
+  @doc """
+  Generate a step definition matching a particular string and optionally a
+  context map. See the module documentation for usage examples.
+
+  The given, when and then steps are actually interchangeable &ndash; the
+  separate macros are provided for readability only.
+  """
   defmacro defgiven(step, context \\ @empty_context, do: block) do
     define_step(step, context, block)
   end
 
+  @doc """
+  An alias for `defgiven/2`.
+  """
   defmacro defwhen(step, context \\ @empty_context, do: block) do
     define_step(step, context, block)
   end
 
+  @doc """
+  An alias for `defgiven/2`.
+  """
   defmacro defthen(step, context \\ @empty_context, do: block) do
     define_step(step, context, block)
   end
 
+  @doc false
   def normalise_name(step), do: step |> String.replace(~r/\{.*?\}/, "{}")
 
+  @doc false
   def extract_args(step) do
     Regex.scan(~r/\{(.*?)\}/, step, capture: :all_but_first) |> List.flatten()
   end
