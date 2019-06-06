@@ -29,8 +29,8 @@ defmodule Kale.FeatureCase do
     steps =
       body
       |> String.split(~r/\R/, trim: true)
-      |> Enum.filter(&(&1 =~ ~r/^(Given|When|Then|And|But|\*)\b/))
-      |> Enum.map(&String.replace(&1, ~r/^\s*\S+\s+/, ""))
+      |> Enum.filter(&valid_step?/1)
+      |> Enum.map(&remove_keyword/1)
 
     quote do
       test unquote(name), context do
@@ -53,13 +53,14 @@ defmodule Kale.FeatureCase do
     define_step(step, context, block)
   end
 
+  def normalise_name(step), do: step |> String.replace(~r/\{.*?\}/, "{}")
+
+  def extract_args(step) do
+    Regex.scan(~r/\{(.*?)\}/, step, capture: :all_but_first) |> List.flatten()
+  end
+
   defp define_step(step, context, block) do
-    quoted_args =
-      step
-      |> extract_args()
-      |> Enum.map(&String.to_atom/1)
-      |> Enum.map(&{&1, [], __MODULE__})
-      |> Enum.map(&quote do: var!(unquote(&1)))
+    quoted_args = step |> extract_args() |> Enum.map(&arg_string_to_quoted_var/1)
 
     quote do
       defp unquote({:step, [], [normalise_name(step), quoted_args, context]}) do
@@ -68,9 +69,10 @@ defmodule Kale.FeatureCase do
     end
   end
 
-  def normalise_name(step), do: step |> String.replace(~r/\{.*?\}/, "{}")
+  defp valid_step?(step), do: step =~ ~r/^(Given|When|Then|And|But|\*)\b/
+  defp remove_keyword(step), do: String.replace(step, ~r/^\s*\S+\s+/, "")
 
-  def extract_args(step) do
-    Regex.scan(~r/\{(.*?)\}/, step, capture: :all_but_first) |> List.flatten()
+  defp arg_string_to_quoted_var(arg) do
+    quote do: var!(unquote({String.to_atom(arg), [], __MODULE__}))
   end
 end
