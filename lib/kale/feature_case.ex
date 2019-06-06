@@ -1,23 +1,21 @@
 defmodule Kale.FeatureCase do
   defmacro __using__(options) do
-    quote do
-      use ExUnit.Case, unquote(options)
+    quote bind_quoted: [options: options] do
+      use ExUnit.Case, options
       import Kale.FeatureCase, only: :macros
 
       def step(step, context) do
         case step(
-               unquote(__MODULE__).normalise_name(step),
-               unquote(__MODULE__).extract_args(step),
+               Kale.FeatureCase.normalise_name(step),
+               Kale.FeatureCase.extract_args(step),
                context
              ) do
-          %{} = results -> context = context |> Map.merge(results)
+          %{} = results -> context |> Map.merge(results)
           _ -> context
         end
       end
     end
   end
-
-  def agent_name, do: {:global, {__MODULE__, :state, self()}}
 
   defmacro feature(name, do: block) do
     quote do
@@ -61,11 +59,7 @@ defmodule Kale.FeatureCase do
       |> extract_args()
       |> Enum.map(&String.to_atom/1)
       |> Enum.map(&{&1, [], __MODULE__})
-      |> Enum.map(
-        &quote do
-          var!(unquote(&1))
-        end
-      )
+      |> Enum.map(&quote do: var!(unquote(&1)))
 
     quote do
       def unquote({:step, [], [normalise_name(step), quoted_args, context]}) do
