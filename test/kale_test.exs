@@ -38,7 +38,8 @@ defmodule KaleTest do
     """
   end
 
-  defgiven "I start with {a}", _ do
+  defgiven "I start with {a}" do
+    # No need to use context argument if it's not required
     %{result: String.to_integer(a)}
   end
 

@@ -10,7 +10,7 @@ stable.
     * other lines are ignored
   * match steps by calling `defwhen` etc with a string matching the one used in the step
     * note that it doesn't actually matter whether you use `defwhen`, `defthen` etc
-    * step definitions take the `ExUnit` context as their second argument
+    * step definitions can optionally take the `ExUnit` context as their second argument
   * interpolate values into step descriptions using {braces}
     * concrete values from the steps are automatically available using the variable name in braces
 

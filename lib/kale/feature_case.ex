@@ -41,9 +41,19 @@ defmodule Kale.FeatureCase do
     end
   end
 
-  defmacro defgiven(step, context, do: block), do: define_step(step, context, block)
-  defmacro defwhen(step, context, do: block), do: define_step(step, context, block)
-  defmacro defthen(step, context, do: block), do: define_step(step, context, block)
+  @empty_context quote do: %{}
+
+  defmacro defgiven(step, context \\ @empty_context, do: block) do
+    define_step(step, context, block)
+  end
+
+  defmacro defwhen(step, context \\ @empty_context, do: block) do
+    define_step(step, context, block)
+  end
+
+  defmacro defthen(step, context \\ @empty_context, do: block) do
+    define_step(step, context, block)
+  end
 
   defp define_step(step, context, block) do
     quoted_args =
