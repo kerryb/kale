@@ -1,4 +1,5 @@
 defmodule Kale.FeatureCase do
+  # credo:disable-for-this-file Credo.Check.Warning.UnsafeToAtom
   @moduledoc ~s'''
   An `ExUnit` test case for writing features using Kale.
 
@@ -61,6 +62,7 @@ defmodule Kale.FeatureCase do
   @doc """
   Generate a feature block, which corresponds to an ExUnit `describe`.
   """
+  @spec feature(String.t(), do: Macro.t()) :: Macro.t()
   defmacro feature(name, do: block) do
     quote do
       describe unquote(name) do
@@ -72,6 +74,7 @@ defmodule Kale.FeatureCase do
   @doc """
   Generate a scenario block, which corresponds to an ExUnit `test`.
   """
+  @spec scenario(String.t(), String.t()) :: Macro.t()
   defmacro scenario(name, body) do
     steps =
       body
@@ -95,6 +98,7 @@ defmodule Kale.FeatureCase do
   The given, when and then steps are actually interchangeable &ndash; the
   separate macros are provided for readability only.
   """
+  @spec defgiven(String.t(), Macro.t(), do: Macro.t()) :: Macro.t()
   defmacro defgiven(step, context \\ @empty_context, do: block) do
     define_step(step, context, block)
   end
@@ -102,6 +106,7 @@ defmodule Kale.FeatureCase do
   @doc """
   An alias for `defgiven/2`.
   """
+  @spec defwhen(String.t(), Macro.t(), do: Macro.t()) :: Macro.t()
   defmacro defwhen(step, context \\ @empty_context, do: block) do
     define_step(step, context, block)
   end
@@ -109,14 +114,17 @@ defmodule Kale.FeatureCase do
   @doc """
   An alias for `defgiven/2`.
   """
+  @spec defthen(String.t(), Macro.t(), do: Macro.t()) :: Macro.t()
   defmacro defthen(step, context \\ @empty_context, do: block) do
     define_step(step, context, block)
   end
 
   @doc false
+  @spec normalise_name(String.t()) :: String.t()
   def normalise_name(step), do: step |> String.replace(~r/\{.*?\}/, "{}")
 
   @doc false
+  @spec extract_args(String.t()) :: [String.t()]
   def extract_args(step) do
     ~r/\{(.*?)\}/ |> Regex.scan(step, capture: :all_but_first) |> List.flatten()
   end
