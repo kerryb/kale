@@ -41,13 +41,24 @@ defmodule Kale.FeatureCase do
     end
   end
 
-  defmacro defgiven(step, args, context, do: block), do: define_step(step, args, context, block)
-  defmacro defwhen(step, args, context, do: block), do: define_step(step, args, context, block)
-  defmacro defthen(step, args, context, do: block), do: define_step(step, args, context, block)
+  defmacro defgiven(step, context, do: block), do: define_step(step, context, block)
+  defmacro defwhen(step, context, do: block), do: define_step(step, context, block)
+  defmacro defthen(step, context, do: block), do: define_step(step, context, block)
 
-  defp define_step(step, args, context, block) do
+  defp define_step(step, context, block) do
+    quoted_args =
+      step
+      |> extract_args()
+      |> Enum.map(&String.to_atom/1)
+      |> Enum.map(&{&1, [], __MODULE__})
+      |> Enum.map(
+        &quote do
+          var!(unquote(&1))
+        end
+      )
+
     quote do
-      def unquote({:step, [], [normalise_name(step), args, context]}) do
+      def unquote({:step, [], [normalise_name(step), quoted_args, context]}) do
         unquote(block)
       end
     end

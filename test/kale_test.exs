@@ -38,19 +38,19 @@ defmodule KaleTest do
     """
   end
 
-  defgiven "I start with {a}", [a], _ do
+  defgiven "I start with {a}", _ do
     %{result: String.to_integer(a)}
   end
 
-  defwhen "I add {a} then multiply by {b}", [a, b], %{result: result} do
+  defwhen "I add {a} then multiply by {b}", %{result: result} do
     %{result: (result + String.to_integer(a)) * String.to_integer(b)}
   end
 
-  defthen "the result is {result}", [result], context do
+  defthen "the result is {result}", context do
     assert context.result == String.to_integer(result)
   end
 
-  defthen "foo is {foo} and bar is {bar}", [foo, bar], context do
+  defthen "foo is {foo} and bar is {bar}", context do
     assert context.foo == foo
     assert context.bar == bar
   end
