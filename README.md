@@ -139,4 +139,3 @@ This includes being able to specify the line number of the scenario or feature.
 ## TODO
 
   * Allow keyword lists and/or {:ok, ...} tuples for updating context, as well as maps
-  * Report tests as "features" (using ExUnit test type)

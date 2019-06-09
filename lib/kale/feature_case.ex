@@ -1,5 +1,6 @@
 defmodule Kale.FeatureCase do
   # credo:disable-for-this-file Credo.Check.Warning.UnsafeToAtom
+  # credo:disable-for-this-file Credo.Check.Readability.Specs
   @moduledoc ~s'''
   An `ExUnit` test case for writing features using Kale.
 
@@ -83,8 +84,10 @@ defmodule Kale.FeatureCase do
       |> Enum.filter(&valid_step?/1)
       |> Enum.map(&remove_keyword/1)
 
-    quote do
-      test unquote(name), context do
+    quote(bind_quoted: [name: name, steps: steps]) do
+      test_name = ExUnit.Case.register_test(__ENV__, :feature, name, [])
+
+      def unquote(test_name)(context) do
         unquote(steps) |> Enum.reduce(context, fn s, c -> step(s, c) end)
       end
     end
