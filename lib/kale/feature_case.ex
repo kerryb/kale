@@ -5,7 +5,7 @@ defmodule Kale.FeatureCase do
 
   # Usage
 
-  ```
+  ```elixir
   defmodule MyTest do
     use Kale.FeatureCase, async: true
 
@@ -15,6 +15,7 @@ defmodule Kale.FeatureCase do
       When action {foo} happens
       Then the result is {bar}
       """
+    end
 
     defgiven "some precondition" do
       # ...
