@@ -64,18 +64,18 @@ Then write a `feature` (which corresponds to an ExUnit `describe`) containing
 one or more scenarios:
 
 ```elixir
-  feature "Feature description here" do
+feature "Feature description here" do
 
-    scenario "Scenario description here", """
-    Given some precondition
-    When action {foo} happens
-    Then the result is {bar}
-    """
+  scenario "Scenario description here", """
+  Given some precondition
+  When action {foo} happens
+  Then the result is {bar}
+  """
 
-    scenario "Another scenario", """
-    ...
-    """
-  end
+  scenario "Another scenario", """
+  ...
+  """
+end
 ```
 
 Each scenario has a description, and a multiline string containing a list of
@@ -91,26 +91,26 @@ The simplest form of step definition just takes a literal string argument
 matching the step from the scenario, and a block of code to execute:
 
 ```elixir
-  defgiven "some precondition" do
-    # ...
-  end
+defgiven "some precondition" do
+  # ...
+end
 ```
 
 If you need to access the ExUnit context, it can be provided as a second
 argument:
 
 ```elixir
-  defgiven "some precondition", context do
-    login(context.user)
-  end
+defgiven "some precondition", context do
+  login(context.user)
+end
 ```
 
 You can also pattern match specific values from the context:
 
 ```elixir
-  defgiven "some precondition", %{user: user} do
-    login(context.user)
-  end
+defgiven "some precondition", %{user: user} do
+  login(context.user)
+end
 ```
 
 If a step definition returns a map, a keyword list, or an `{:ok, context}`
@@ -119,10 +119,10 @@ context for future steps in the same scenario. for example to store a value for
 `session`:
 
 ```elixir
-  defgiven "some precondition", %{user: user} do
-    session = login(context.user)
-    %{session: session}
-  end
+defgiven "some precondition", %{user: user} do
+  session = login(context.user)
+  %{session: session}
+end
 ```
 
 Values can be interpolated by wrapping them in `{}`. The value from the step in
@@ -130,9 +130,9 @@ the scanario will be available within the body of the step definition using the
 variable name provided:
 
 ```elixir
-  defwhen "action {action} happens" do
-    do_something(action)
-  end
+defwhen "action {action} happens" do
+  do_something(action)
+end
 ```
 
 Tests are run just like normal ExUnit tests (which is what the compile to).
