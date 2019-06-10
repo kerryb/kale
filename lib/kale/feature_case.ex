@@ -54,7 +54,10 @@ defmodule Kale.FeatureCase do
                Kale.FeatureCase.extract_args(step),
                context
              ) do
-          %{} = results -> context |> Map.merge(results)
+          results when is_map(results) -> context |> Map.merge(results)
+          {:ok, results} when is_map(results) -> context |> Map.merge(results)
+          [{_, _} | _] = results -> context |> Map.merge(Map.new(results))
+          {:ok, [{_, _} | _] = results} -> context |> Map.merge(Map.new(results))
           _ -> context
         end
       end

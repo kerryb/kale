@@ -22,6 +22,14 @@ defmodule KaleTest do
     Then the result is {69}
     """
 
+    scenario "context can be returned as maps, keyword lists or :ok tuples", """
+    Given a step that returns context as a map
+    And a step that returns context as a keyword list
+    And a step that returns context as an :ok, <map> tuple
+    And a step that returns context as an :ok, <keyword list> tuple
+    Then all context is stored
+    """
+
     scenario "Lines not beginning with Given, When, Then, And, But or * are ignored", """
     Given I start with {16}
     This is just a note
@@ -49,6 +57,22 @@ defmodule KaleTest do
     %{result: String.to_integer(a)}
   end
 
+  defgiven "a step that returns context as a map" do
+    %{a: 1}
+  end
+
+  defgiven "a step that returns context as a keyword list" do
+    [b: 2]
+  end
+
+  defgiven "a step that returns context as an :ok, <map> tuple" do
+    {:ok, %{c: 3}}
+  end
+
+  defgiven "a step that returns context as an :ok, <keyword list> tuple" do
+    {:ok, [d: 4]}
+  end
+
   defwhen "I add {a} then multiply by {b}", %{result: result} do
     %{result: (result + String.to_integer(a)) * String.to_integer(b)}
   end
@@ -72,5 +96,9 @@ defmodule KaleTest do
 
   defthen "the full context is still available to subsequent steps", context do
     assert context.bar == "b"
+  end
+
+  defthen "all context is stored", context do
+    assert context |> Map.take([:a, :b, :c, :d]) == %{a: 1, b: 2, c: 3, d: 4}
   end
 end

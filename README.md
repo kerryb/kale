@@ -136,7 +136,14 @@ variable name provided:
 Tests are run just like normal ExUnit tests (which is what the compile to).
 This includes being able to specify the line number of the scenario or feature.
 
-## TODO
+Tests are reported as "features" by ExUnit, separately from other tests:
 
-  * Allow keyword lists and/or `{:ok, ...}` tuples for updating context, as
-    well as maps
+```
+$ mix test
+................
+
+Finished in 0.08 seconds
+6 features, 10 tests, 0 failures
+
+Randomized with seed 955579
+```
