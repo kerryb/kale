@@ -36,6 +36,12 @@ defmodule KaleTest do
     scenario "data returned by setup callbacks is merged into the context", """
     Then foo is {a} and bar is {b}
     """
+
+    scenario "full context is always retained, even if steps don't use it", """
+    When a step definition only pattern-matches some of the context
+    And another step definition omits the context altogether
+    Then the full context is still available to subsequent steps
+    """
   end
 
   defgiven "I start with {a}" do
@@ -47,6 +53,14 @@ defmodule KaleTest do
     %{result: (result + String.to_integer(a)) * String.to_integer(b)}
   end
 
+  defwhen "a step definition only pattern-matches some of the context", %{foo: _} do
+    %{baz: "c"}
+  end
+
+  defthen "another step definition omits the context altogether" do
+    %{qux: "e"}
+  end
+
   defthen "the result is {result}", context do
     assert context.result == String.to_integer(result)
   end
@@ -54,5 +68,10 @@ defmodule KaleTest do
   defthen "foo is {foo} and bar is {bar}", context do
     assert context.foo == foo
     assert context.bar == bar
+  end
+
+  defthen "the full context is still available to subsequent steps", context do
+    IO.inspect(context)
+    assert context.bar == "b"
   end
 end

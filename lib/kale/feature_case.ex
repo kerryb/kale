@@ -136,11 +136,15 @@ defmodule Kale.FeatureCase do
   defp define_step(step, context, block) do
     quoted_args = step |> extract_args() |> Enum.map(&arg_string_to_quoted_var/1)
 
-    quote do
-      defp unquote({:step, [], [normalise_name(step), quoted_args, context]}) do
-        unquote(block)
+    ast =
+      quote do
+        defp unquote({:step, [], [normalise_name(step), quoted_args, context]}) do
+          unquote(block)
+        end
       end
-    end
+
+    ast |> Macro.to_string() |> IO.puts()
+    ast
   end
 
   defp valid_step?(step), do: step =~ ~r/^(Given|When|Then|And|But|\*)\b/
