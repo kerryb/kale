@@ -11,6 +11,8 @@ defmodule Kale.MixProject do
       deps: deps(),
       package: package(),
       docs: docs(),
+      source_url: "https://github.com/kerryb/kale",
+      homepage_url: "https://github.com/kerryb/kale",
       dialyzer: dialyzer()
     ]
   end
@@ -38,8 +40,7 @@ defmodule Kale.MixProject do
     [
       maintainers: ["Kerry Buckley"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/kerryb/kale"},
-      source_url: "https://github.com/kerryb/kale"
+      links: %{"GitHub" => "https://github.com/kerryb/kale"}
     ]
   end
 
