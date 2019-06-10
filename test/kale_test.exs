@@ -71,7 +71,6 @@ defmodule KaleTest do
   end
 
   defthen "the full context is still available to subsequent steps", context do
-    IO.inspect(context)
     assert context.bar == "b"
   end
 end
