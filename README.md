@@ -147,3 +147,11 @@ Finished in 0.08 seconds
 
 Randomized with seed 955579
 ```
+
+## Development
+
+To build the project after cloning:
+
+```bash
+$ mix deps.get
+$ make
