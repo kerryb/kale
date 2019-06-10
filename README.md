@@ -2,7 +2,7 @@
 
 Basic given-when-then steps for ExUnit tests.
 
-## Why?
+## Why?
 
 I have previously used [White Bread](https://github.com/meadsteve/white-bread)
 and [Cabbage](https://github.com/cabbage-ex/cabbage) for writing Cucumber-style
@@ -20,7 +20,7 @@ Kale does **not** implement the full gherkin language. Instead it uses simple
 string matching (no regexes) with the ability to explicitly interpolate values
 by surrounding them with `{}`.
 
-## Why "Kale"?
+## Why "Kale"?
 
 As a nod to [Spinach](https://github.com/codegram/spinach).
 
@@ -48,7 +48,7 @@ If you want to import Kale's formatter rules, import it in your `.formatter.exs`
 ]
 ```
 
-## Usage
+## Usage
 
 In your test, `use Kale.FeatureCase`:
 
@@ -138,4 +138,5 @@ This includes being able to specify the line number of the scenario or feature.
 
 ## TODO
 
-  * Allow keyword lists and/or {:ok, ...} tuples for updating context, as well as maps
+  * Allow keyword lists and/or `{:ok, ...}` tuples for updating context, as
+    well as maps
