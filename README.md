@@ -20,7 +20,7 @@ Kale does **not** implement the full gherkin language. Instead it uses simple
 string matching (no regexes) with the ability to explicitly interpolate values
 by surrounding them with `{}`.
 
-## Why "Kale"?
+### Why "Kale"?
 
 As a nod to [Spinach](https://github.com/codegram/spinach).
 
