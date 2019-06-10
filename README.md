@@ -113,8 +113,10 @@ You can also pattern match specific values from the context:
   end
 ```
 
-If your step definition returns a map, it will be merged into the context for
-future steps in the same scenario:
+If a step definition returns a map, a keyword list, or an `{:ok, context}`
+tuple, where `context` is a map or a keyword list, it will be merged into the
+context for future steps in the same scenario. for example to store a value for
+`session`:
 
 ```elixir
   defgiven "some precondition", %{user: user} do
