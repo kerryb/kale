@@ -26,7 +26,7 @@ As a nod to [Spinach](https://github.com/codegram/spinach).
 
 ## Installation
 
-Kale is [available in Hex](https://hex.pm/docs/publish), and can be installed
+Kale is [available in Hex](https://hex.pm/packages/kale), and can be installed
 by adding it to your list of dependencies in `mix.exs`:
 
 ```elixir
