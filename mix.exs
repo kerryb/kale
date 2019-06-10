@@ -53,7 +53,7 @@ defmodule Kale.MixProject do
   defp docs do
     [
       main: "readme",
-      extras: ["README.md", "LICENSE.md"]
+      extras: ["README.md", "LICENSE.md", "CHANGELOG.md"]
     ]
   end
 end
