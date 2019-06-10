@@ -39,7 +39,9 @@ end
 
 Then run `mix deps.get`.
 
-If you want to import Kale's formatter rules, import it in your `.formatter.exs`:
+If you want to use Kale's formatter rules (to avoid having parens inserted
+around the arguments of `scenario`, `defwhen` etc), import it in your
+`.formatter.exs`:
 
 ```elixir
 [
@@ -109,14 +111,14 @@ You can also pattern match specific values from the context:
 
 ```elixir
 defgiven "some precondition", %{user: user} do
-  login(context.user)
+  login(user)
 end
 ```
 
 If a step definition returns a map, a keyword list, or an `{:ok, context}`
-tuple, where `context` is a map or a keyword list, it will be merged into the
-context for future steps in the same scenario. for example to store a value for
-`session`:
+tuple (where `context` is a map or a keyword list), it will be merged into the
+context for future steps in the same scenario. For example, to store a value
+for `session`:
 
 ```elixir
 defgiven "some precondition", %{user: user} do
@@ -135,7 +137,7 @@ defwhen "action {action} happens" do
 end
 ```
 
-Tests are run just like normal ExUnit tests (which is what the compile to).
+Tests are run just like normal ExUnit tests (which is what they compile to).
 This includes being able to specify the line number of the scenario or feature.
 
 Tests are reported as "features" by ExUnit, separately from other tests:
