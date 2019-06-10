@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2019-06-10
+
 ### Added
 
 - Report tests as "features" when running `mix test`
@@ -60,7 +62,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/kerryb/kale/compare/0.5.1...HEAD
+[Unreleased]: https://github.com/kerryb/kale/compare/0.6.0...HEAD
+[0.6.0]: https://github.com/kerryb/kale/compare/0.5.1...0.6.0
 [0.5.1]: https://github.com/kerryb/kale/compare/0.5.0...0.5.1
 [0.5.0]: https://github.com/kerryb/kale/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/kerryb/kale/compare/0.3.0...0.4.0
