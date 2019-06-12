@@ -4,7 +4,7 @@ defmodule Kale.MixProject do
   def project do
     [
       app: :kale,
-      version: "0.6.2",
+      version: "0.7.0",
       description: description(),
       elixir: "~> 1.3",
       start_permanent: Mix.env() == :prod,

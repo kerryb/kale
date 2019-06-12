@@ -32,7 +32,7 @@ by adding it to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:kale, "~> 0.6.0", only: :test}
+    {:kale, "~> 0.7.0", only: :test}
   ]
 end
 ```
