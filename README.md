@@ -52,11 +52,12 @@ around the arguments of `scenario`, `defwhen` etc), import it in your
 
 ## Usage
 
-In your test, `use Kale.FeatureCase`:
+In your test, `use Kale`:
 
 ```elixir
 defmodule MyTest do
-  use Kale.FeatureCase, async: true
+  use ExUnit.Case, async: true
+  use Kale
 
   # ...
 end
