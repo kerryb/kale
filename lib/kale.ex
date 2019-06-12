@@ -1,4 +1,4 @@
-defmodule Kale.FeatureCase do
+defmodule Kale do
   # credo:disable-for-this-file Credo.Check.Warning.UnsafeToAtom
   # credo:disable-for-this-file Credo.Check.Readability.Specs
   @moduledoc ~s'''
@@ -8,7 +8,7 @@ defmodule Kale.FeatureCase do
 
   ```elixir
   defmodule MyTest do
-    use Kale.FeatureCase, async: true
+    use Kale, async: true
 
     feature "Feature description here" do
       scenario "Scenario description here", """
@@ -43,15 +43,14 @@ defmodule Kale.FeatureCase do
   [:kale]` in your `.formatter.exs`.
   '''
 
-  defmacro __using__(options) do
-    quote bind_quoted: [options: options] do
-      use ExUnit.Case, options
-      import Kale.FeatureCase, only: :macros
+  defmacro __using__(_) do
+    quote do
+      import Kale, only: :macros
 
       defp step(step, context) do
         case step(
-               Kale.FeatureCase.normalise_name(step),
-               Kale.FeatureCase.extract_args(step),
+               Kale.normalise_name(step),
+               Kale.extract_args(step),
                context
              ) do
           results when is_map(results) -> context |> Map.merge(results)

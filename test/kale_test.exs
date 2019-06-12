@@ -1,5 +1,6 @@
 defmodule KaleTest do
-  use Kale.FeatureCase, async: true
+  use ExUnit.Case, async: true
+  use Kale
 
   setup_all do
     {:ok, foo: "a"}
