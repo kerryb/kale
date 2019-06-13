@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2019-06-13
+
 ### Changed
 
 - Only update context if step explicitly returns a `{:reply, context}` tuple
@@ -85,7 +87,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/kerryb/kale/compare/0.7.0...HEAD
+[Unreleased]: https://github.com/kerryb/kale/compare/0.8.0...HEAD
+[0.8.0]: https://github.com/kerryb/kale/compare/0.7.0...0.8.0
 [0.7.0]: https://github.com/kerryb/kale/compare/0.6.2...0.7.0
 [0.6.2]: https://github.com/kerryb/kale/compare/0.6.1...0.6.2
 [0.6.1]: https://github.com/kerryb/kale/compare/0.6.0...0.6.1
