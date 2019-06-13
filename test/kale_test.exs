@@ -17,13 +17,6 @@ defmodule KaleTest do
     Then the result is {42}
     """
 
-    # TODO: This test needs to be in a separate module
-    scenario "Contexts are isolated between async tests", """
-    Given I start with {16}
-    When I add {7} then multiply by {3}
-    Then the result is {69}
-    """
-
     scenario "context can be returned as maps or keyword lists", """
     Given a step that returns context as a map
     And a step that returns context as a keyword list
