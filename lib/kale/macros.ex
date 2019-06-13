@@ -79,7 +79,7 @@ defmodule Kale.Macros do
     end
   end
 
-  defp valid_step?(step), do: step =~ ~r/^(Given|When|Then|And|But|\*)\b/
+  defp valid_step?(step), do: step =~ ~r/^(Given|When|Then|And|But)\b/
   defp remove_keyword(step), do: String.replace(step, ~r/^\s*\S+\s+/, "")
 
   defp arg_string_to_quoted_var(arg) do

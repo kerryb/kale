@@ -82,8 +82,8 @@ end
 ```
 
 Each scenario has a description, and a multiline string containing a list of
-steps, which should all begin with one of `Given`, `When`, `Then`, `And`, `But`
-or `*`. Lines beginning with anything else are treated as comments and ignored.
+steps, which should all begin with one of `Given`, `When`, `Then`, `And` or
+`But`. Lines beginning with anything else are treated as comments and ignored.
 
 Each unique step needs a definition, which needs to be created in the test
 module by calling `defgiven`, `defwhen` or `defthen`. Technically it doesn't

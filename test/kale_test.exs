@@ -30,7 +30,6 @@ defmodule KaleTest do
     And I add {1} then multiply by {2}
     Anders could have written this line, but it's not an And
     But I add {2} then multiply by {4}
-    * I add {5} then multiply by {5}
     Then the result is {568}
     """
 
