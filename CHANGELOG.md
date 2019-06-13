@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Only update context if step explicitly returns a `{:reply, context}` tuple
+
 ## [0.7.0] - 2019-06-12
+
 ### Changed
 
 - Remove `FeatureCase`. Clients should `use Kale` as well as the normal `ExUnit.Case` etc.

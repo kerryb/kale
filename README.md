@@ -116,15 +116,14 @@ defgiven "some precondition", %{user: user} do
 end
 ```
 
-If a step definition returns a map, a keyword list, or an `{:ok, context}`
-tuple (where `context` is a map or a keyword list), it will be merged into the
-context for future steps in the same scenario. For example, to store a value
-for `session`:
+If a step definition returns a `{:reply, context}` tuple, where `context` is a
+map or keyword list, it will be merged into the context for future steps in the
+same scenario. For example, to store a value for `session`:
 
 ```elixir
 defgiven "some precondition", %{user: user} do
   session = login(context.user)
-  %{session: session}
+  {:reply, session: session}
 end
 ```
 

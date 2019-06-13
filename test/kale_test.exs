@@ -17,17 +17,16 @@ defmodule KaleTest do
     Then the result is {42}
     """
 
+    # TODO: This test needs to be in a separate module
     scenario "Contexts are isolated between async tests", """
     Given I start with {16}
     When I add {7} then multiply by {3}
     Then the result is {69}
     """
 
-    scenario "context can be returned as maps, keyword lists or :ok tuples", """
+    scenario "context can be returned as maps or keyword lists", """
     Given a step that returns context as a map
     And a step that returns context as a keyword list
-    And a step that returns context as an :ok, <map> tuple
-    And a step that returns context as an :ok, <keyword list> tuple
     Then all context is stored
     """
 
@@ -55,35 +54,27 @@ defmodule KaleTest do
 
   defgiven "I start with {a}" do
     # No need to use context argument if it's not required
-    %{result: String.to_integer(a)}
+    {:reply, result: String.to_integer(a)}
   end
 
   defgiven "a step that returns context as a map" do
-    %{a: 1}
+    {:reply, %{a: 1}}
   end
 
   defgiven "a step that returns context as a keyword list" do
-    [b: 2]
-  end
-
-  defgiven "a step that returns context as an :ok, <map> tuple" do
-    {:ok, %{c: 3}}
-  end
-
-  defgiven "a step that returns context as an :ok, <keyword list> tuple" do
-    {:ok, [d: 4]}
+    {:reply, b: 2}
   end
 
   defwhen "I add {a} then multiply by {b}", %{result: result} do
-    %{result: (result + String.to_integer(a)) * String.to_integer(b)}
+    {:reply, result: (result + String.to_integer(a)) * String.to_integer(b)}
   end
 
   defwhen "a step definition only pattern-matches some of the context", %{foo: _} do
-    %{baz: "c"}
+    {:reply, baz: "c"}
   end
 
   defthen "another step definition omits the context altogether" do
-    %{qux: "e"}
+    {:reply, qux: "e"}
   end
 
   defthen "the result is {result}", context do
@@ -100,6 +91,6 @@ defmodule KaleTest do
   end
 
   defthen "all context is stored", context do
-    assert context |> Map.take([:a, :b, :c, :d]) == %{a: 1, b: 2, c: 3, d: 4}
+    assert context |> Map.take([:a, :b]) == %{a: 1, b: 2}
   end
 end

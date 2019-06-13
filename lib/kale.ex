@@ -27,8 +27,9 @@ defmodule Kale do
     defwhen "action {action} happens" do
       # interpolated variables are magically available
       result = do_something(action)
-      # if the step returns a map, it will be merged with the test context
-      %{result: result}
+      # if the step returns a {:reply, _} tuple containing a map or keyword
+      # list, it will be merged with the test context
+      {:reply, result: result}
     end
 
     defthen "the result is {expected}", %{result: result} do
@@ -57,10 +58,8 @@ defmodule Kale do
                Utils.extract_args(step),
                context
              ) do
-          results when is_map(results) -> context |> Map.merge(results)
-          {:ok, results} when is_map(results) -> context |> Map.merge(results)
-          [{_, _} | _] = results -> context |> Map.merge(Map.new(results))
-          {:ok, [{_, _} | _] = results} -> context |> Map.merge(Map.new(results))
+          {:reply, results} when is_map(results) -> context |> Map.merge(results)
+          {:reply, [{_, _} | _] = results} -> context |> Map.merge(Map.new(results))
           _ -> context
         end
       end
