@@ -13,7 +13,9 @@ defmodule Kale.MixProject do
       docs: docs(),
       source_url: "https://github.com/kerryb/kale",
       homepage_url: "https://github.com/kerryb/kale",
-      dialyzer: dialyzer()
+      test_coverage: [tool: ExCoveralls],
+      dialyzer: dialyzer(),
+      preferred_cli_env: preferred_cli_env()
     ]
   end
 
@@ -32,6 +34,7 @@ defmodule Kale.MixProject do
     [
       {:credo, "~> 1.0", only: :dev},
       {:dialyxir, "~> 1.0.0-rc.6", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.7", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
@@ -54,6 +57,16 @@ defmodule Kale.MixProject do
     [
       main: "readme",
       extras: ["README.md", "LICENSE.md", "CHANGELOG.md"]
+    ]
+  end
+
+  defp preferred_cli_env do
+    [
+      coveralls: :test,
+      "coveralls.detail": :test,
+      "coveralls.post": :test,
+      "coveralls.html": :test,
+      "test.prepare": :test
     ]
   end
 end

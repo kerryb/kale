@@ -7,6 +7,6 @@ credo:
 dialyzer:
 	mix dialyzer --halt-exit-status
 test:
-	mix test
+	mix coveralls.html
 docs:
 	mix docs
