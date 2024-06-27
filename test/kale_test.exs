@@ -83,6 +83,6 @@ defmodule KaleTest do
   end
 
   defthen "all context is stored", context do
-    assert context |> Map.take([:a, :b]) == %{a: 1, b: 2}
+    assert Map.take(context, [:a, :b]) == %{a: 1, b: 2}
   end
 end

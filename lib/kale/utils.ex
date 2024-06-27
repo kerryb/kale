@@ -16,7 +16,7 @@ defmodule Kale.Utils do
   ```
   """
   @spec normalise_name(String.t()) :: String.t()
-  def normalise_name(step), do: step |> String.replace(~r/\{.*?\}/, "{}")
+  def normalise_name(step), do: String.replace(step, ~r/\{.*?\}/, "{}")
 
   @doc """
   Return the interpolated variables or argument names from a string. Elements

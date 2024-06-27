@@ -34,7 +34,7 @@ defmodule Kale.Macros do
       test_name = ExUnit.Case.register_test(__ENV__, :feature, name, [])
 
       def unquote(test_name)(context) do
-        unquote(steps) |> Enum.reduce(context, fn s, c -> step(s, c) end)
+        Enum.reduce(unquote(steps), context, fn s, c -> step(s, c) end)
       end
     end
   end

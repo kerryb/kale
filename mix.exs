@@ -35,7 +35,8 @@ defmodule Kale.MixProject do
       {:credo, "~> 1.0", only: :dev},
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
       {:excoveralls, "~> 0.7", only: :test},
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:ex_doc, ">= 0.0.0", only: :dev},
+      {:styler, "~> 1.0.0-rc.1", only: [:dev, :test], runtime: false}
     ]
   end
 

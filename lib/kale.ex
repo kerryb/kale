@@ -58,8 +58,8 @@ defmodule Kale do
                Utils.extract_args(step),
                context
              ) do
-          {:reply, results} when is_map(results) -> context |> Map.merge(results)
-          {:reply, [{_, _} | _] = results} -> context |> Map.merge(Map.new(results))
+          {:reply, results} when is_map(results) -> Map.merge(context, results)
+          {:reply, [{_, _} | _] = results} -> Map.merge(context, Map.new(results))
           _ -> context
         end
       end
