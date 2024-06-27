@@ -159,6 +159,7 @@ To build the project after cloning:
 ```bash
 $ mix deps.get
 $ make
+```
 
 ## TODO
 

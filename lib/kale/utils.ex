@@ -28,6 +28,7 @@ defmodule Kale.Utils do
 
   iex> Kale.Utils.extract_args("When I add {1} and{2}")
   ["1", "2"]
+  ```
   """
   @spec extract_args(String.t()) :: [String.t()]
   def extract_args(step) do
