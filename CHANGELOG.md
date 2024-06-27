@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.1] - 2024-06-27
+
+### Changed
+
+- Switch to ExUnit.Case.register_test/6 to address deprecation warning
+
 ## [0.8.0] - 2019-06-13
 
 ### Changed
