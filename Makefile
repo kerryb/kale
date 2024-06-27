@@ -5,7 +5,7 @@ format:
 credo:
 	mix credo --strict
 dialyzer:
-	mix dialyzer --halt-exit-status
+	mix dialyzer
 test:
 	mix coveralls.html
 docs:

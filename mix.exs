@@ -33,7 +33,7 @@ defmodule Kale.MixProject do
   defp deps do
     [
       {:credo, "~> 1.0", only: :dev},
-      {:dialyxir, "~> 1.0.0-rc.6", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.0", only: :dev, runtime: false},
       {:excoveralls, "~> 0.7", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev}
     ]
@@ -49,7 +49,7 @@ defmodule Kale.MixProject do
 
   defp dialyzer do
     [
-      plt_add_deps: :transitive
+      plt_add_deps: :app_tree
     ]
   end
 
