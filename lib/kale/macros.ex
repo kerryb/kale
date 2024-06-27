@@ -30,8 +30,10 @@ defmodule Kale.Macros do
       |> Enum.filter(&valid_step?/1)
       |> Enum.map(&remove_keyword/1)
 
-    quote(bind_quoted: [name: name, steps: steps]) do
-      test_name = ExUnit.Case.register_test(__ENV__, :feature, name, [])
+    %{module: mod, file: file, line: line} = __CALLER__
+
+    quote(bind_quoted: [mod: mod, file: file, line: line, name: name, steps: steps]) do
+      test_name = ExUnit.Case.register_test(mod, file, line, :feature, name, [])
 
       def unquote(test_name)(context) do
         Enum.reduce(unquote(steps), context, fn s, c -> step(s, c) end)
